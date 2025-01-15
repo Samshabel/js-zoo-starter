@@ -1,24 +1,41 @@
+var animalPopulation = 0;
+
 function run() {
   var tigger = new Tiger("Tigger");
-  tigger.eat("meat");
+  // tigger.eat("meat");
   var pooh = new Bear("Pooh");
-  pooh.eat("fish");
-  pooh.eat("meat");
+  // pooh.eat("fish");
+  // pooh.eat("meat");
   var rarity = new Unicorn("Rarity");
-  rarity.eat("marshmellows");
-  rarity.sleep();
+  // rarity.eat("marshmellows");
+  // rarity.sleep();
   var gemma = new Giraffe("Gemma");
-  gemma.eat("meat");
-  gemma.eat("leaves");
+  // gemma.eat("meat");
+  // gemma.eat("leaves");
   var stinger = new Bee("Stinger");
-  stinger.eat("ice cream");
-  stinger.eat("pollen");
+  // stinger.eat("ice cream");
+  // stinger.eat("pollen");
+  var zoebot = new Zookeeper("Zoebot");
+  zoebot.feedAnimals([tigger, pooh, rarity, gemma], "fish");
+}
+
+class Zookeeper {
+  constructor(name) {
+    this.name = name;
+  }
+  feedAnimals(animals, food) {
+    console.log(this.name+" is feeding "+food+" to "+animals.length+" of "+Animal.getPopulation()+ " total animals");
+    for (let i = 0; i < animals.length; i++) {
+      animals[i].eat(food);
+    }
+  }
 }
 
 class Animal {
   constructor(name, favoriteFood) {
     this.name = name;
     this.favoriteFood = favoriteFood;
+    animalPopulation++;
   }
   sleep() {
     console.log(this.name + " sleeps for 8 hours")
@@ -30,6 +47,9 @@ class Animal {
     } else {
       this.sleep(this.name);
     }
+  }
+  static getPopulation() {
+    return animalPopulation;
   }
 }
 
