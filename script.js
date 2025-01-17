@@ -7,7 +7,6 @@ $(document).ready(function(){
     var rarity = new Unicorn("Rarity");
     var gemma = new Giraffe("Gemma");
     var stinger = new Bee("Stinger");
-    var zoebot = new Zookeeper("Zoebot");
     listAnimals();
 });
 
@@ -31,11 +30,6 @@ function createAnimal(){
         case 5:
             animal = new Bee(name);
             break;
-        case 6:
-            animal = new Sophie(name);
-            break;
-        default:
-            alert("That didn't work. Please try again.");
     }
     listAnimals();
 }
@@ -45,8 +39,7 @@ function listAnimals(){
     for (var i = 0; i < allAnimals.length; i++){
         list += (allAnimals[i].firstName + ", a " + allAnimals[i].constructor.name + " whose favorite food is " + allAnimals[i].favoriteFood + "<br>");
     }
-    console.log(list);
-    $("#list").html(list);
+    document.getElementById("list").innerHTML = list;
 }
 
 function feedAnimals(){
@@ -54,25 +47,22 @@ function feedAnimals(){
     var food = Number($("#meals").val());
     switch(food) {
         case 1:
-            food = "chocolate";
-            break;
-        case 2:
             food = "meat";
             break;
+        case 2:
+            food = "marshmellows";
+            break;
         case 3:
-            food = "chow mein";
+            food = "leaves";
             break;
         case 4:
-            food = "pasta bolognese";
+            food = "fish";
             break;
         case 5:
-            food = "empanadas";
+            food = "pollen";
             break;
         case 6:
-            food = "marshmallows";
-            break;
-        case 7:
-            food = "leaves";
+            food = "chocolate";
             break;
     }
     for (var i = 0; i < allAnimals.length; i++){
@@ -81,10 +71,15 @@ function feedAnimals(){
     }
 }
 
+function addFood() {
+    var newFood = $("menuAdd").val();
+    $("menu").append(newFood);
+}
+
 function deleteAnimal(){
     var name = $("#idDelete").val();
     for (var i = 0; i < allAnimals.length; i++){
-        if (name === allAnimals[i].firstName){
+        if (name == allAnimals[i].firstName){
             allAnimals.splice(i, 1);
         }
     }
@@ -170,7 +165,7 @@ class Giraffe extends Animal {
     }
 
     eat(food) {
-        food === "leaves" ? (super.eat(food),  this.sleep(this.firstName)) : $("#feed").append("YUCK!! " + this.firstName + " will not eat " + food);
+        food == "leaves" ? (super.eat(food),  this.sleep(this.firstName)) : $("#feed").append("YUCK!! " + this.firstName + " will not eat " + food);
     }
 }
 
@@ -185,27 +180,12 @@ class Bee extends Animal {
     }
 
     eat(food) {
-        food === "pollen" ? (super.eat(food), this.sleep(this.firstName)) : $("#feed").append("YUCK!! " + this.firstName + " will not eat " + food);
-    }
-}
-
-// this class was created with Sophie's permission
-class Sophie extends Animal {
-    constructor(name){
-        super(name, "jelly babies");
-    }
-}
-
-class Zookeeper {
-
-    constructor(name) {
-        this.firstName = name;
-    }
-
-    feedAnimals(animals, food) {
-        $("#feed").append(this.firstName + " is feeding " + food + " to " + animals.length + " of " + animalPopulation + " total animals");
-        for (var i = 0; i < animals.length; i++) {
-            animals[i].eat(food);
+        if (food == this.favoriteFood) {
+            $("#feed").append(this.firstName + " eats " + food + "<br>");
+            $("#feed").append("YUM!!! " + this.firstName + " wants more "+ food+ "<br>");
+            this.sleep();
+        } else {
+            $("#feed").append("YUCK!!! " + this.firstName + " will not eat " + food+ "<br>")
         }
     }
 }

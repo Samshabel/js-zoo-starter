@@ -1,5 +1,5 @@
 body {
-    background-image: url("007-.jpg");
+    background-color: blueviolet
 }
 
 div {
@@ -16,7 +16,7 @@ h1, div {
 }
 
 .insidePage {
-    background-color: white;
+    background-color: blue;
     border: 2px solid goldenrod;
     padding: 5px;
     width: 400px;
