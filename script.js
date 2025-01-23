@@ -12,25 +12,26 @@ $(document).ready(function(){
 
 function createAnimal(){
     var name = $("#name").val();
-    var type = Number($("#types").val());
+    var type = $("#types").val();
     var animal;
-    switch(type) {
-        case 1:
-            animal = new Tiger(name);
-            break;
-        case 2:
-            animal = new Bear(name);
-            break;
-        case 3:
-            animal = new Unicorn(name);
-            break;
-        case 4:
-            animal = new Giraffe(name);
-            break;
-        case 5:
-            animal = new Bee(name);
-            break;
-    }
+    // switch(type) {
+    //     case 1:
+    //         animal = new Tiger(name);
+    //         break;
+    //     case 2:
+    //         animal = new Bear(name);
+    //         break;
+    //     case 3:
+    //         animal = new Unicorn(name);
+    //         break;
+    //     case 4:
+    //         animal = new Giraffe(name);
+    //         break;
+    //     case 5:
+    //         animal = new Bee(name);
+    //         break;
+    // }
+    animal = new type(name);
     listAnimals();
 }
 
@@ -44,27 +45,7 @@ function listAnimals(){
 
 function feedAnimals(){
     document.getElementById("feed").innerHTML = "";
-    var food = Number($("#meals").val());
-    switch(food) {
-        case 1:
-            food = "meat";
-            break;
-        case 2:
-            food = "marshmellows";
-            break;
-        case 3:
-            food = "leaves";
-            break;
-        case 4:
-            food = "fish";
-            break;
-        case 5:
-            food = "pollen";
-            break;
-        case 6:
-            food = "chocolate";
-            break;
-    }
+    var food = $("#meals").val();
     for (var i = 0; i < allAnimals.length; i++){
         allAnimals[i].eat(food);
         $("#feed").append("<br>");
@@ -72,8 +53,18 @@ function feedAnimals(){
 }
 
 function addFood() {
-    var newFood = $("menuAdd").val();
-    $("menu").append(newFood);
+    var newFood = $("#menuAdd").val();
+    var option = document.createElement("option");
+    var selector = document.getElementById("meals");
+    option.text = newFood;
+    option.value = newFood.toLowerCase();
+    selector.add(option);
+    var li = document.createElement("li");
+    var ul = document.getElementById("menuList");
+    li.textContent = newFood;
+    ul.appendChild(li);
+    document.getElementById("feed").innerHTML = "";
+    $("#feed").append(newFood+" was added to the menu!")
 }
 
 function deleteAnimal(){
@@ -92,14 +83,19 @@ function deleteAnimal(){
 function rename(){
     var oldName = $("#oldName").val();
     var newName = $("#newName").val();
+    var oldType = $("#oldType").val();
     for (var i = 0; i < allAnimals.length; i++){
-        if (oldName == allAnimals[i].firstName) {
+        if (oldName == allAnimals[i].firstName && oldType == allAnimals[i].constructor.name) {
             allAnimals[i].firstName = newName;
+            document.getElementById("feed").innerHTML = "";
+            $("#feed").append(oldName+" was renamed to "+newName+"!");
+            break;
+        } else {
+            document.getElementById("feed").innerHTML = "";
+            $("#feed").append("No animals were found with that name and type, please try again");
         }
     }
     listAnimals();
-    document.getElementById("feed").innerHTML = "";
-    $("#feed").append(oldName+" was renamed to "+newName+"!");
 }
 
 class Animal {
@@ -118,7 +114,7 @@ class Animal {
 
     eat(food) {
         $("#feed").append(this.firstName + " eats " + food + "<br>");
-        food === this.favoriteFood ? $("#feed").append("YUM!! " + this.firstName + " wants more " + food + "<br>") : this.sleep(this.firstName);
+        food === this.favoriteFood ? $("#feed").append("YUM!! " + this.firstName + " wants more " + food) : this.sleep(this.firstName);
     }
 
     static getPopulation() {
@@ -165,7 +161,13 @@ class Giraffe extends Animal {
     }
 
     eat(food) {
-        food == "leaves" ? (super.eat(food),  this.sleep(this.firstName)) : $("#feed").append("YUCK!! " + this.firstName + " will not eat " + food);
+        if (food == this.favoriteFood) {
+            $("#feed").append(this.firstName + " eats " + food + "<br>");
+            $("#feed").append("YUM!!! " + this.firstName + " wants more "+ food+ "<br>");
+            this.sleep();
+        } else {
+            $("#feed").append("YUCK!!! " + this.firstName + " will not eat " + food+ "<br>")
+        }
     }
 }
 
